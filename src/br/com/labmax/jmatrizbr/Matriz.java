@@ -59,6 +59,7 @@ public class Matriz {
      *         fora dos limites da matriz
      */
     public double getElemento(int linha, int coluna) {
+        validarIndices(linha, coluna);
         return elementos[linha][coluna];
     }
 
@@ -72,6 +73,33 @@ public class Matriz {
      *         fora dos limites da matriz
      */
     public void setElemento(int linha, int coluna, double valor) {
+        validarIndices(linha, coluna);
         elementos[linha][coluna] = valor;
+    }
+
+    
+
+    /**
+     * Valida os índices de uma posição da matriz.
+     *
+     * @param linha índice da linha
+     * @param coluna índice da coluna
+     * @throws IndexOutOfBoundsException se algum índice estiver
+     *         fora dos limites da matriz
+     */
+    private void validarIndices(int linha, int coluna) {
+        if (linha < 0 || linha >= linhas) {
+            throw new IndexOutOfBoundsException(
+                "Índice de linha inválido: " + linha
+                + ". Intervalo permitido: 0 a " + (linhas - 1) + "."
+            );
+        }
+
+        if (coluna < 0 || coluna >= colunas) {
+            throw new IndexOutOfBoundsException(
+                "Índice de coluna inválido: " + coluna
+                + ". Intervalo permitido: 0 a " + (colunas - 1) + "."
+            );
+        }    
     }
 }
