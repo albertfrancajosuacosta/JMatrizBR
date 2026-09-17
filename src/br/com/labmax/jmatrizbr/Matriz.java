@@ -77,8 +77,6 @@ public class Matriz {
         elementos[linha][coluna] = valor;
     }
 
-    
-
     /**
      * Valida os índices de uma posição da matriz.
      *
@@ -102,4 +100,37 @@ public class Matriz {
             );
         }    
     }
+
+    /**
+ * Retorna a representação textual da matriz.
+ *
+ * <p>Cada linha é apresentada entre colchetes, com os elementos
+ * separados por vírgula e espaço.
+ *
+ * @return representação textual dos elementos da matriz
+ */
+@Override
+public String toString() {
+    StringBuilder resultado = new StringBuilder();
+
+    for (int linha = 0; linha < linhas; linha++) {
+        resultado.append("[");
+
+        for (int coluna = 0; coluna < colunas; coluna++) {
+            if (coluna > 0) {
+                resultado.append(", ");
+            }
+
+            resultado.append(elementos[linha][coluna]);
+        }
+
+        resultado.append("]");
+
+        if (linha < linhas - 1) {
+            resultado.append(System.lineSeparator());
+        }
+    }
+
+    return resultado.toString();
+}
 }
