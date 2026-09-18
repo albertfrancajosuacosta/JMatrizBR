@@ -119,10 +119,10 @@ da biblioteca e serão implementadas gradualmente.
 - [ ] 106. concatenarHorizontalmente(Matriz outra)
 - [ ] 107. concatenarVerticalmente(Matriz outra)
 - [ ] 108. concatenarDiagonalmente(Matriz outra)
-- [ ] 109. equals(Object objeto)
-- [ ] 110. hashCode()
-- [ ] 111. igualExata(Matriz outra)
-- [ ] 112. formatar(int casasDecimais)
+- [x] 109. equals(Object objeto)
+- [x] 110. hashCode()
+- [x] 111. igualExata(Matriz outra)
+- [x] 112. formatar(int casasDecimais)
 
 ## Estrutura atual
 

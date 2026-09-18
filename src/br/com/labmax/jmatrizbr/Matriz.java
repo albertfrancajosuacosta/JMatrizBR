@@ -1,5 +1,7 @@
 package br.com.labmax.jmatrizbr;
 
+import java.util.Locale;
+
 /**
  * Representa uma matriz de valores do tipo {@code double}.
  *
@@ -1137,5 +1139,126 @@ public class Matriz {
         }
 
         return resultado;
+    }
+
+    /**
+     * Compara esta matriz com outro objeto.
+     *
+     * <p>
+     * A comparação considera as dimensões e os valores exatos
+     * dos elementos.
+     *
+     * @param objeto objeto a ser comparado
+     * @return {@code true} se os objetos representarem matrizes iguais
+     */
+    @Override
+    public boolean equals(Object objeto) {
+        if (this == objeto) {
+            return true;
+        }
+
+        if (!(objeto instanceof Matriz outra)) {
+            return false;
+        }
+
+        return igualExata(outra);
+    }
+
+    /**
+     * Calcula o código hash da matriz.
+     *
+     * @return código hash baseado nas dimensões e nos elementos
+     */
+    @Override
+    public int hashCode() {
+        int resultado = 17;
+
+        resultado = 31 * resultado + linhas;
+        resultado = 31 * resultado + colunas;
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                long bits = Double.doubleToLongBits(
+                        elementos[linha][coluna]);
+
+                resultado = 31 * resultado
+                        + (int) (bits ^ (bits >>> 32));
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Verifica se outra matriz possui exatamente as mesmas dimensões
+     * e os mesmos valores.
+     *
+     * @param outra matriz a ser comparada
+     * @return {@code true} se as matrizes forem exatamente iguais
+     * @throws NullPointerException se a matriz informada for nula
+     */
+    public boolean igualExata(Matriz outra) {
+        if (outra == null) {
+            throw new NullPointerException(
+                    "A matriz a ser comparada não pode ser nula.");
+        }
+
+        if (linhas != outra.linhas || colunas != outra.colunas) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                if (Double.doubleToLongBits(
+                        elementos[linha][coluna]) != Double.doubleToLongBits(
+                                outra.elementos[linha][coluna])) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Retorna uma representação textual da matriz com a quantidade
+     * de casas decimais informada.
+     *
+     * @param casasDecimais quantidade de casas decimais
+     * @return matriz formatada
+     * @throws IllegalArgumentException se a quantidade de casas
+     *                                  decimais for negativa
+     */
+    public String formatar(int casasDecimais) {
+        if (casasDecimais < 0) {
+            throw new IllegalArgumentException(
+                    "A quantidade de casas decimais não pode ser negativa.");
+        }
+
+        String formato = "%." + casasDecimais + "f";
+        StringBuilder resultado = new StringBuilder();
+
+        for (int linha = 0; linha < linhas; linha++) {
+            resultado.append("[");
+
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                if (coluna > 0) {
+                    resultado.append(", ");
+                }
+
+                resultado.append(String.format(
+                        Locale.ROOT,
+                        formato,
+                        elementos[linha][coluna]));
+            }
+
+            resultado.append("]");
+
+            if (linha < linhas - 1) {
+                resultado.append(System.lineSeparator());
+            }
+        }
+
+        return resultado.toString();
     }
 }
