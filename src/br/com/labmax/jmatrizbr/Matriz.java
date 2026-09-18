@@ -50,6 +50,15 @@ public class Matriz {
     }
 
     /**
+     * Retorna as dimensões da matriz.
+     *
+     * @return array com as dimensões da matriz(linhas, colunas).
+     */
+    public int[] getDimensoes() {
+        return new int[]{getLinhas(), getColunas()};
+    }
+
+    /**
      * Retorna o elemento na posição informada.
      *
      * @param linha  índice da linha, de zero até {@code getLinhas() - 1}
