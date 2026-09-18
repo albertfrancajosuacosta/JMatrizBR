@@ -11,19 +11,27 @@ Biblioteca em Java SE para trabalhar com matrizes e documentação em português
 As funcionalidades abaixo representam o planejamento
 da biblioteca e serão implementadas gradualmente.
 
-- Criação de matrizes com valores do tipo `double`.
-- Consulta de elementos e dimensões.
-- Soma e subtração de matrizes.
-- Multiplicação por escalar.
-- Multiplicação entre matrizes.
-- Cálculo da transposta.
-- Criação de matriz identidade.
-- Matriz triângular superior.
-- Matriz triângular inferior.
-- Verificação de propriedades das matrizes.
-- Cálculo de determinante.
-- Matriz inversa.
-- Resolução de sistemas lineares.
+- Criação de matrizes a partir de arrays bidimensionais.
+- Cópia independente de matrizes.
+- Consulta dos elementos de uma linha.
+- Consulta dos elementos de uma coluna.
+- Obtenção de uma cópia de todos os elementos.
+- Extração da diagonal principal.
+- Comparação de matrizes com tolerâncias numéricas.
+- Verificação de matriz quadrada.
+- Verificação de matriz nula.
+- Verificação de matriz identidade.
+- Verificação de matriz simétrica.
+- Verificação de matriz diagonal.
+- Verificação de matriz triangular superior.
+- Verificação de matriz triangular inferior.
+- Cálculo do traço.
+- Divisão por escalar.
+- Potenciação de matrizes com expoentes inteiros não negativos.
+- Produto de Hadamard — multiplicação elemento a elemento.
+- Cálculo da norma de Frobenius.
+- Extração de submatrizes.
+- Criação de matriz diagonal.
 
 
 ## Estrutura atual
