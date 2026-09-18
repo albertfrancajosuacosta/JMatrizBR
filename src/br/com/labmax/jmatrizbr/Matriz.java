@@ -5,7 +5,8 @@ package br.com.labmax.jmatrizbr;
  *
  * <p>
  * Os índices de linhas e colunas começam em zero.
- * Todos os elementos são inicializados com {@code 0.0}.
+ * A matriz pode ser criada com elementos zerados ou
+ * a partir de uma cópia dos valores de um array bidimensional.
  */
 public class Matriz {
     private int linhas;
@@ -29,6 +30,69 @@ public class Matriz {
         this.linhas = linhas;
         this.colunas = colunas;
         this.elementos = new double[linhas][colunas];
+    }
+
+    /**
+     * Cria uma matriz copiando os valores do array informado.
+     *
+     * <p>
+     * O array deve possuir pelo menos uma linha e uma coluna.
+     * Todas as linhas devem ser não nulas e ter o mesmo tamanho.
+     *
+     * <p>
+     * Os dados são copiados: alterações posteriores no array
+     * recebido não modificam a matriz, e vice-versa.
+     *
+     * @param valores array bidimensional com os valores iniciais
+     * @throws NullPointerException     se o array ou alguma linha for nulo
+     * @throws IllegalArgumentException se o array não possuir linhas
+     *                                  ou colunas, ou se as linhas tiverem tamanhos
+     *                                  diferentes
+     */
+    public Matriz(double[][] valores) {
+        if (valores == null) {
+            throw new NullPointerException(
+                    "O array de valores não pode ser nulo.");
+        }
+
+        if (valores.length == 0) {
+            throw new IllegalArgumentException(
+                    "A matriz deve possuir pelo menos uma linha.");
+        }
+
+        if (valores[0] == null) {
+            throw new NullPointerException(
+                    "A linha 0 não pode ser nula.");
+        }
+
+        int quantidadeColunas = valores[0].length;
+
+        if (quantidadeColunas == 0) {
+            throw new IllegalArgumentException(
+                    "A matriz deve possuir pelo menos uma coluna.");
+        }
+
+        for (int linha = 0; linha < valores.length; linha++) {
+            if (valores[linha] == null) {
+                throw new NullPointerException(
+                        "A linha " + linha + " não pode ser nula.");
+            }
+
+            if (valores[linha].length != quantidadeColunas) {
+                throw new IllegalArgumentException(
+                        "Todas as linhas devem ter a mesma quantidade de colunas.");
+            }
+        }
+
+        this.linhas = valores.length;
+        this.colunas = quantidadeColunas;
+        this.elementos = new double[linhas][colunas];
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                this.elementos[linha][coluna] = valores[linha][coluna];
+            }
+        }
     }
 
     /**
@@ -545,6 +609,530 @@ public class Matriz {
                 }
 
                 copia[linha][pivo] = 0.0;
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Cria uma cópia independente desta matriz.
+     *
+     * <p>
+     * A cópia possui as mesmas dimensões e valores.
+     * Alterações em uma matriz não afetam a outra.
+     *
+     * @return nova matriz com uma cópia de todos os elementos
+     */
+    public Matriz copiar() {
+        return new Matriz(elementos);
+    }
+
+    /**
+     * Retorna uma cópia dos elementos da linha informada.
+     *
+     * <p>
+     * Alterações no array retornado não modificam a matriz,
+     * e alterações na matriz não modificam o array retornado.
+     *
+     * @param linha índice da linha, de zero até {@code getLinhas() - 1}
+     * @return array independente com os elementos da linha
+     * @throws IndexOutOfBoundsException se a linha estiver fora dos limites
+     */
+    public double[] getLinha(int linha) {
+        validarIndices(linha, 0);
+
+        double[] copia = new double[colunas];
+
+        for (int coluna = 0; coluna < colunas; coluna++) {
+            copia[coluna] = elementos[linha][coluna];
+        }
+
+        return copia;
+    }
+
+    /**
+     * Retorna uma cópia dos elementos da coluna informada.
+     *
+     * <p>
+     * Alterações no array retornado não modificam a matriz,
+     * e alterações na matriz não modificam o array retornado.
+     *
+     * @param coluna índice da coluna, de zero até {@code getColunas() - 1}
+     * @return array independente com os elementos da coluna
+     * @throws IndexOutOfBoundsException se a coluna estiver fora dos limites
+     */
+    public double[] getColuna(int coluna) {
+        validarIndices(0, coluna);
+
+        double[] copia = new double[linhas];
+
+        for (int linha = 0; linha < linhas; linha++) {
+            copia[linha] = elementos[linha][coluna];
+        }
+
+        return copia;
+    }
+
+    /**
+     * Retorna uma cópia profunda dos elementos desta matriz.
+     *
+     * <p>
+     * O array retornado e suas linhas são independentes
+     * do armazenamento interno. Alterações na cópia não modificam
+     * a matriz, e vice-versa.
+     *
+     * @return array bidimensional com uma cópia de todos os elementos
+     */
+    public double[][] getElementos() {
+        double[][] copia = new double[linhas][colunas];
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                copia[linha][coluna] = elementos[linha][coluna];
+            }
+        }
+
+        return copia;
+    }
+
+    /**
+     * Retorna uma cópia dos elementos da diagonal principal.
+     *
+     * <p>
+     * Também aceita matrizes retangulares. O tamanho do array
+     * retornado é o menor entre a quantidade de linhas e colunas.
+     *
+     * <p>
+     * Alterações no array retornado não modificam a matriz,
+     * e alterações na matriz não modificam o array retornado.
+     *
+     * @return array independente com os elementos da diagonal principal
+     */
+    public double[] getDiagonalPrincipal() {
+        int tamanho = Math.min(linhas, colunas);
+        double[] diagonal = new double[tamanho];
+
+        for (int i = 0; i < tamanho; i++) {
+            diagonal[i] = elementos[i][i];
+        }
+
+        return diagonal;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente igual à informada.
+     *
+     * <p>
+     * As dimensões devem ser iguais. Cada par de elementos finitos
+     * deve atender à tolerância absoluta ou à tolerância relativa,
+     * calculada em relação ao maior valor absoluto do par.
+     *
+     * <p>
+     * Valores NaN nunca são considerados iguais. Valores infinitos
+     * são considerados iguais apenas quando possuem o mesmo sinal.
+     *
+     * @param outra              matriz a ser comparada
+     * @param toleranciaAbsoluta diferença absoluta máxima permitida
+     * @param toleranciaRelativa diferença relativa máxima permitida
+     * @return {@code true} se todos os elementos forem aproximadamente
+     *         iguais; {@code false} se houver diferença nas dimensões
+     *         ou algum par não atender aos critérios
+     * @throws NullPointerException     se a matriz informada for nula
+     * @throws IllegalArgumentException se alguma tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean aproximadamenteIgual(
+            Matriz outra,
+            double toleranciaAbsoluta,
+            double toleranciaRelativa) {
+
+        if (outra == null) {
+            throw new NullPointerException(
+                    "A matriz a ser comparada não pode ser nula.");
+        }
+
+        if (!Double.isFinite(toleranciaAbsoluta)
+                || toleranciaAbsoluta < 0.0
+                || !Double.isFinite(toleranciaRelativa)
+                || toleranciaRelativa < 0.0) {
+            throw new IllegalArgumentException(
+                    "As tolerâncias devem ser finitas e não negativas.");
+        }
+
+        if (linhas != outra.linhas || colunas != outra.colunas) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double a = elementos[linha][coluna];
+                double b = outra.elementos[linha][coluna];
+
+                if (Double.isNaN(a) || Double.isNaN(b)) {
+                    return false;
+                }
+
+                // Inclui valores idênticos e infinitos de mesmo sinal.
+                if (a == b) {
+                    continue;
+                }
+
+                if (!Double.isFinite(a) || !Double.isFinite(b)) {
+                    return false;
+                }
+
+                double diferenca = Math.abs(a - b);
+
+                if (diferenca <= toleranciaAbsoluta) {
+                    continue;
+                }
+
+                double escala = Math.max(Math.abs(a), Math.abs(b));
+
+                // Evita transbordamento na diferença de valores extremos.
+                double diferencaRelativa = Double.isFinite(diferenca)
+                        ? diferenca / escala
+                        : Math.abs(a / escala - b / escala);
+
+                if (diferencaRelativa > toleranciaRelativa) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é quadrada.
+     *
+     * @return {@code true} se a quantidade de linhas for igual
+     *         à quantidade de colunas; {@code false} caso contrário
+     */
+    public boolean isQuadrada() {
+        return linhas == colunas;
+    }
+
+    /**
+     * Valida uma tolerância absoluta.
+     *
+     * @param tolerancia tolerância a ser validada
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    private void validarTolerancia(double tolerancia) {
+        if (!Double.isFinite(tolerancia) || tolerancia < 0.0) {
+            throw new IllegalArgumentException(
+                    "A tolerância deve ser finita e não negativa.");
+        }
+    }
+
+    /**
+     * Verifica se todos os elementos são aproximadamente zero.
+     *
+     * @param tolerancia valor absoluto máximo permitido por elemento
+     * @return {@code true} se todos os elementos forem finitos
+     *         e tiverem valor absoluto menor ou igual à tolerância
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isNula(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double valor = elementos[linha][coluna];
+
+                if (!Double.isFinite(valor)
+                        || Math.abs(valor) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente uma identidade.
+     *
+     * @param tolerancia diferença absoluta máxima em relação
+     *                   ao valor esperado em cada posição
+     * @return {@code true} se a matriz for quadrada, contiver apenas
+     *         valores finitos e atender ao padrão da identidade
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isIdentidade(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        if (!isQuadrada()) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double valor = elementos[linha][coluna];
+                double esperado = linha == coluna ? 1.0 : 0.0;
+
+                if (!Double.isFinite(valor)
+                        || Math.abs(valor - esperado) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente simétrica.
+     *
+     * @param tolerancia diferença absoluta máxima entre
+     *                   elementos em posições transpostas
+     * @return {@code true} se a matriz for quadrada, contiver apenas
+     *         valores finitos e os pares atenderem à tolerância
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isSimetrica(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        if (!isQuadrada()) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            if (!Double.isFinite(elementos[linha][linha])) {
+                return false;
+            }
+
+            for (int coluna = linha + 1; coluna < colunas; coluna++) {
+                double a = elementos[linha][coluna];
+                double b = elementos[coluna][linha];
+
+                if (!Double.isFinite(a)
+                        || !Double.isFinite(b)
+                        || Math.abs(a - b) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente diagonal.
+     *
+     * @param tolerancia valor absoluto máximo permitido
+     *                   para elementos fora da diagonal principal
+     * @return {@code true} se a matriz for quadrada, contiver apenas
+     *         valores finitos e os elementos fora da diagonal
+     *         forem aproximadamente zero
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isDiagonal(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        if (!isQuadrada()) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double valor = elementos[linha][coluna];
+
+                if (!Double.isFinite(valor)) {
+                    return false;
+                }
+
+                if (linha != coluna && Math.abs(valor) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente triangular superior.
+     *
+     * @param tolerancia valor absoluto máximo permitido
+     *                   para elementos abaixo da diagonal principal
+     * @return {@code true} se a matriz for quadrada, contiver apenas
+     *         valores finitos e os elementos abaixo da diagonal
+     *         forem aproximadamente zero
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isTriangularSuperior(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        if (!isQuadrada()) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double valor = elementos[linha][coluna];
+
+                if (!Double.isFinite(valor)) {
+                    return false;
+                }
+
+                if (linha > coluna && Math.abs(valor) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se esta matriz é aproximadamente triangular inferior.
+     *
+     * @param tolerancia valor absoluto máximo permitido
+     *                   para elementos acima da diagonal principal
+     * @return {@code true} se a matriz for quadrada, contiver apenas
+     *         valores finitos e os elementos acima da diagonal
+     *         forem aproximadamente zero
+     * @throws IllegalArgumentException se a tolerância for negativa,
+     *                                  NaN ou infinita
+     */
+    public boolean isTriangularInferior(double tolerancia) {
+        validarTolerancia(tolerancia);
+
+        if (!isQuadrada()) {
+            return false;
+        }
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                double valor = elementos[linha][coluna];
+
+                if (!Double.isFinite(valor)) {
+                    return false;
+                }
+
+                if (linha < coluna && Math.abs(valor) > tolerancia) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Calcula o traço desta matriz.
+     *
+     * <p>
+     * O traço é a soma dos elementos da diagonal principal.
+     * A matriz original não é alterada.
+     *
+     * @return soma dos elementos da diagonal principal
+     * @throws IllegalStateException se a matriz não for quadrada
+     */
+    public double traco() {
+        if (!isQuadrada()) {
+            throw new IllegalStateException(
+                    "O cálculo do traço exige uma matriz quadrada.");
+        }
+
+        double soma = 0.0;
+
+        for (int i = 0; i < linhas; i++) {
+            soma += elementos[i][i];
+        }
+
+        return soma;
+    }
+
+    /**
+     * Divide cada elemento desta matriz pelo escalar informado.
+     *
+     * <p>
+     * A matriz original não é alterada.
+     * O divisor deve ser finito e diferente de zero.
+     *
+     * @param divisor número pelo qual os elementos serão divididos
+     * @return nova matriz com as mesmas dimensões e os elementos divididos
+     * @throws IllegalArgumentException se o divisor for NaN ou infinito
+     * @throws ArithmeticException      se o divisor for zero
+     */
+    public Matriz dividirEscalar(double divisor) {
+        if (!Double.isFinite(divisor)) {
+            throw new IllegalArgumentException(
+                    "O divisor deve ser um número finito.");
+        }
+
+        if (divisor == 0.0) {
+            throw new ArithmeticException(
+                    "Não é possível dividir por zero.");
+        }
+
+        Matriz resultado = new Matriz(linhas, colunas);
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                resultado.elementos[linha][coluna] = elementos[linha][coluna] / divisor;
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Eleva esta matriz a um expoente inteiro não negativo.
+     *
+     * <p>
+     * A matriz deve ser quadrada. Para expoente zero,
+     * retorna a identidade; para expoente um, retorna uma cópia.
+     * A matriz original não é alterada.
+     *
+     * <p>
+     * Utiliza exponenciação por quadrados.
+     *
+     * @param expoente expoente inteiro não negativo
+     * @return nova matriz contendo o resultado da potenciação
+     * @throws IllegalArgumentException se o expoente for negativo
+     * @throws IllegalStateException    se a matriz não for quadrada
+     */
+    public Matriz potencia(int expoente) {
+        if (expoente < 0) {
+            throw new IllegalArgumentException(
+                    "O expoente deve ser maior ou igual a zero.");
+        }
+
+        if (!isQuadrada()) {
+            throw new IllegalStateException(
+                    "A potenciação exige uma matriz quadrada.");
+        }
+
+        if (expoente == 0) {
+            return identidade(linhas);
+        }
+
+        Matriz base = copiar();
+        Matriz resultado = null;
+        int restante = expoente;
+
+        while (restante > 0) {
+            if (restante % 2 != 0) {
+                resultado = resultado == null
+                        ? base
+                        : resultado.multiplicar(base);
+            }
+
+            restante /= 2;
+
+            if (restante > 0) {
+                base = base.multiplicar(base);
             }
         }
 
