@@ -167,4 +167,40 @@ public class Matriz {
 
         return resultado;
     }
+
+
+    /**
+     * Subtrai esta matriz à matriz informada.
+     *
+     * <p>
+     * As duas matrizes devem ter as mesmas dimensões.
+     * O resultado é uma nova matriz; as originais não são alteradas.
+     *
+     * @param outra matriz a ser subtraída
+     * @return nova matriz com a subtração dos elementos correspondentes
+     * @throws NullPointerException     se a matriz informada for nula
+     * @throws IllegalArgumentException se as dimensões forem diferentes
+     */
+    public Matriz subtrair(Matriz outra) {
+        if (outra == null) {
+            throw new NullPointerException(
+                    "A matriz a ser subtraída não pode ser nula.");
+        }
+
+        if (linhas != outra.linhas || colunas != outra.colunas) {
+            throw new IllegalArgumentException(
+                    "As matrizes devem ter as mesmas dimensões para a subtração.");
+        }
+
+        Matriz resultado = new Matriz(linhas, colunas);
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                resultado.elementos[linha][coluna] = elementos[linha][coluna]
+                        - outra.elementos[linha][coluna];
+            }
+        }
+
+        return resultado;
+    }
 }
