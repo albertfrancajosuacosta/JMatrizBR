@@ -94,7 +94,7 @@ da biblioteca e serão implementadas gradualmente.
 - [ ] 81. erroAbsoluto(Matriz outra)
 - [ ] 82. erroRelativo(Matriz outra)
 - [x] 83. aproximadamenteIgual(...)
-- [ ] 84. somaTotal()
+- [x] 84. somaTotal()
 - [ ] 85. media()
 - [ ] 86. mediana()
 - [ ] 87. variancia()

@@ -1261,4 +1261,21 @@ public class Matriz {
 
         return resultado.toString();
     }
+
+    /**
+     * Calcula a soma de todos os elementos da matriz.
+     *
+     * @return soma total dos elementos
+     */
+    public double somaTotal() {
+        double soma = 0.0;
+
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                soma += elementos[linha][coluna];
+            }
+        }
+
+        return soma;
+    }
 }
