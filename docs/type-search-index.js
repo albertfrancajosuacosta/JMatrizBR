@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"br.com.labmax.jmatrizbr","l":"Matriz"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"br.com.labmax.jmatrizbr.algebra","l":"EspacoVetorial"},{"p":"br.com.labmax.jmatrizbr","l":"Matriz"}];updateSearchResults();

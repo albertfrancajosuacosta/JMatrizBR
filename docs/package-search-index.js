@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"br.com.labmax.jmatrizbr"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"br.com.labmax.jmatrizbr"},{"l":"br.com.labmax.jmatrizbr.algebra"}];updateSearchResults();
