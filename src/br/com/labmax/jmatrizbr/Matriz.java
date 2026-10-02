@@ -723,6 +723,35 @@ public class Matriz {
     }
 
     /**
+     * Retorna uma cópia dos elementos da diagonal secundária.
+     *
+     * <p>
+     * Também aceita matrizes retangulares. O tamanho do array
+     * retornado é o menor entre a quantidade de linhas e colunas.
+     *
+     * <p>
+     * Alterações no array retornado não modificam a matriz,
+     * e alterações na matriz não modificam o array retornado.
+     *
+     * <p>
+     * O percurso começa no canto superior direito e avança uma linha
+     * para baixo e uma coluna para esquerda a cada passo,
+     * a última linha ou a primeira coluna.
+     *  
+     * @return array independente com os elementos da diagonal secundária
+     */
+    public double[] getDiagonalSecundaria() {
+        int tamanho = Math.min(linhas, colunas);
+        double[] diagonalSecundaria = new double[tamanho];
+
+        for (int i = 0; i < tamanho; i++) {
+            diagonalSecundaria[i] = elementos[i][colunas - 1 - i];
+        }
+
+        return diagonalSecundaria;
+    }
+
+    /**
      * Verifica se esta matriz é aproximadamente igual à informada.
      *
      * <p>
